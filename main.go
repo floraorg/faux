@@ -46,7 +46,9 @@ func generatePlaceholder(c *gin.Context) {
 	width := c.Param("width")
 	height := c.Param("height")
 	color := c.Param("color")
-	borderRadius := c.DefaultQuery("radius", "0")
+	borderRadius := c.DefaultQuery("r", "0")
+	dot := c.DefaultQuery("d", "false")
+	grad := c.DefaultQuery("g", "false")
 
 	w, err := strconv.Atoi(width)
 	if err != nil || w <= 0 || w > 3000 {
@@ -66,20 +68,35 @@ func generatePlaceholder(c *gin.Context) {
 	}
 
 	if color == "" {
-		color = "999999"
+		color = "333333"
 	}
 
 	if color[0] == '#' {
 		color = color[1:]
 	}
 
-	if len(color) != 6 {
+	if !(len(color) == 6 || len(color) == 3) {
 		c.String(http.StatusBadRequest, "Invalid color format")
 		return
 	}
 
-	lighterColor := getMediumLighterShade(color)
-	slightlyDarkerForDots := getSlightlyDarkerShade(color)
+	if len(color) == 3 {
+		c2 := color
+		color = ""
+		for i := 0; i < len(c2); i++ {
+			color += string(c2[i]) + string(c2[i]) // Repeat each character
+		}
+	}
+	lighterColor := color
+	slightlyDarkerForDots := color
+	dx := 0
+	if grad == "true" {
+		lighterColor = getMediumLighterShade(color)
+	}
+	if dot == "true" {
+		slightlyDarkerForDots = getSlightlyDarkerShade(color)
+		dx = 20
+	}
 
 	svg := fmt.Sprintf(`<svg width="%d" height="%d" viewBox="0 0 %d %d" xmlns="http://www.w3.org/2000/svg">
 		<defs>
@@ -87,7 +104,7 @@ func generatePlaceholder(c *gin.Context) {
 				<stop offset="0%%" style="stop-color:#%s;stop-opacity:1" />
 				<stop offset="100%%" style="stop-color:#%s;stop-opacity:1" />
 			</linearGradient>
-			<pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse">
+			<pattern id="dots" width="%d" height="%d" patternUnits="userSpaceOnUse">
 				<circle cx="10" cy="10" r="1.2" fill="#%s" opacity="0.4"/>
 			</pattern>
 			<filter id="softShadow">
@@ -111,7 +128,7 @@ func generatePlaceholder(c *gin.Context) {
 		<text x="50%%" y="50%%" text-anchor="middle" dominant-baseline="middle" 
 			font-family="Arial, Helvetica, sans-serif" font-weight="bold" font-size="24" 
 			fill="%s" filter="url(#softShadow)">%dx%d</text>
-	</svg>`, w, h, w, h, color, lighterColor, slightlyDarkerForDots,
+	</svg>`, w, h, w, h, color, lighterColor, dx, dx, slightlyDarkerForDots,
 		w, h, radius, radius,
 		w, h, w, h,
 		getContrastColor(color), w, h)
@@ -168,9 +185,9 @@ func getContrastColor(hexColor string) string {
 	luminance := (0.299*float64(r) + 0.587*float64(g) + 0.114*float64(b)) / 255
 
 	if luminance > 0.5 {
-		return "#000000"
+		return "#111111"
 	}
-	return "#ffffff"
+	return "#eeeeee"
 }
 
 func isDev() bool {
