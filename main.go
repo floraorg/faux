@@ -155,7 +155,22 @@ func getMediumLighterShade(hexColor string) string {
 	g, _ := strconv.ParseInt(hexColor[2:4], 16, 64)
 	b, _ := strconv.ParseInt(hexColor[4:6], 16, 64)
 
-	factor := 1.20 // 20% lighter
+	brightness := 0.299*float64(r) + 0.587*float64(g) + 0.114*float64(b)
+	fmt.Println(brightness)
+
+	var factor float64
+	if brightness < 10 {
+		factor = 60.0
+	} else if brightness < 30 {
+		factor = 3.0
+	} else if brightness < 60 {
+		factor = 2.0
+	} else if brightness < 100 {
+		factor = 1.5
+	} else {
+		factor = 0.8
+	}
+
 	newR := int(math.Min(float64(r)*factor, 255))
 	newG := int(math.Min(float64(g)*factor, 255))
 	newB := int(math.Min(float64(b)*factor, 255))
@@ -169,7 +184,15 @@ func getSlightlyDarkerShade(hexColor string) string {
 	g, _ := strconv.ParseInt(hexColor[2:4], 16, 64)
 	b, _ := strconv.ParseInt(hexColor[4:6], 16, 64)
 
-	factor := 0.85 // 15% darker
+	brightness := 0.299*float64(r) + 0.587*float64(g) + 0.114*float64(b)
+	fmt.Println(brightness)
+
+	var factor float64
+	if brightness < 80 {
+		factor = 1.6
+	} else {
+		factor = 0.85
+	}
 	newR := int(float64(r) * factor)
 	newG := int(float64(g) * factor)
 	newB := int(float64(b) * factor)
