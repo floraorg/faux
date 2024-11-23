@@ -49,6 +49,7 @@ func generatePlaceholder(c *gin.Context) {
 	borderRadius := c.DefaultQuery("r", "0")
 	dot := c.DefaultQuery("d", "false")
 	grad := c.DefaultQuery("g", "false")
+	text := c.DefaultQuery("t", "false")
 
 	w, err := strconv.Atoi(width)
 	if err != nil || w <= 0 || w > 3000 {
@@ -98,6 +99,11 @@ func generatePlaceholder(c *gin.Context) {
 		dx = 20
 	}
 
+	textColor := "#ffffff00"
+	if text == "true" {
+		textColor = getContrastColor(color)
+	}
+
 	svg := fmt.Sprintf(`<svg width="%d" height="%d" viewBox="0 0 %d %d" xmlns="http://www.w3.org/2000/svg">
 		<defs>
 			<linearGradient id="mainGrad" x1="0%%" y1="0%%" x2="100%%" y2="100%%">
@@ -131,7 +137,7 @@ func generatePlaceholder(c *gin.Context) {
 	</svg>`, w, h, w, h, color, lighterColor, dx, dx, slightlyDarkerForDots,
 		w, h, radius, radius,
 		w, h, w, h,
-		getContrastColor(color), w, h)
+		textColor, w, h)
 
 	c.Header("Content-Type", "image/svg+xml")
 	if isDev() {
@@ -166,6 +172,8 @@ func getMediumLighterShade(hexColor string) string {
 	} else if brightness < 60 {
 		factor = 2.0
 	} else if brightness < 100 {
+		factor = 1.75
+	} else if brightness < 150 {
 		factor = 1.5
 	} else {
 		factor = 0.8
@@ -185,13 +193,12 @@ func getSlightlyDarkerShade(hexColor string) string {
 	b, _ := strconv.ParseInt(hexColor[4:6], 16, 64)
 
 	brightness := 0.299*float64(r) + 0.587*float64(g) + 0.114*float64(b)
-	fmt.Println(brightness)
 
 	var factor float64
 	if brightness < 80 {
-		factor = 1.6
+		factor = 1.8
 	} else {
-		factor = 0.85
+		factor = 0.55
 	}
 	newR := int(float64(r) * factor)
 	newG := int(float64(g) * factor)

@@ -16,6 +16,10 @@
       text-wrap: wrap;
     }
 
+    body {
+      width: fit-content;
+    }
+
     html {
       padding: 4rem;
       color: #eee;
@@ -77,25 +81,28 @@
   </p>
 
   <div class="flex2">
-    <img src="/300/200/b34fc7" alt="Purple placeholder with rounded corners">
-    <img src="/250/200/435eee?radius=20" alt="Blue placeholder">
+    <img src="/300/150/b34fc7?r=10&d=true&t=true" alt="Purple placeholder with rounded corners">
+    <img src="/150/150/435eee?r=20&g=true" alt="Blue placeholder">
   </div>
+
+  <div style="margin-top: 1.5rem;">
+    <p class="dim section-label">examples:</p>
+    <div class="example-box">
+      <p>/300/150/b34fc7?r=10&d=true&t=true</p>
+      <p>/150/150/435eee?r=20&g=true</p>
+    </div>
+  </div>
+
 
   <div style="margin-top: 2rem;">
     <p class="dim section-label">usage:</p>
     <div class="example-box">
       <p>/:width/:height # default gray</p>
       <p>/:width/:height/:color # custom color (hex)</p>
-      <p>/:width/:height/:color?radius=N # rounded corners</p>
-    </div>
-  </div>
-
-  <div style="margin-top: 1.5rem;">
-    <p class="dim section-label">examples:</p>
-    <div class="example-box">
-      <p>/200/200/b34fc7 # 200x200 #b34fc7</p>
-      <p>/250/200/435eee?radius=20 # 300x200 #435eee</p>
-      <p>/300/200 # 300x200 gray</p>
+      <p>/:width/:height/:color?r=N # rounded corners</p>
+      <p>/:width/:height/:color?d=true # dotted bg</p>
+      <p>/:width/:height/:color?g=true # gradient bg</p>
+      <p>/:width/:height/:color?t=true # add dimensions</p>
     </div>
   </div>
 
