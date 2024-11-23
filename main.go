@@ -23,6 +23,7 @@ func main() {
 	}
 
 	r := setupRouter()
+	fmt.Printf("Server starting on port :%s\n", port)
 	r.Run(":" + port)
 }
 
