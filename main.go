@@ -155,54 +155,65 @@ func min(a, b int) int {
 	return b
 }
 
-// for the main gradient
-func getMediumLighterShade(hexColor string) string {
+type colorInfo struct {
+	r, g, b    int64
+	brightness float64
+}
+
+func parseColor(hexColor string) colorInfo {
 	r, _ := strconv.ParseInt(hexColor[0:2], 16, 64)
 	g, _ := strconv.ParseInt(hexColor[2:4], 16, 64)
 	b, _ := strconv.ParseInt(hexColor[4:6], 16, 64)
 
 	brightness := 0.299*float64(r) + 0.587*float64(g) + 0.114*float64(b)
-	fmt.Println(brightness)
+
+	return colorInfo{
+		r:          r,
+		g:          g,
+		b:          b,
+		brightness: brightness,
+	}
+}
+
+// for the main gradient
+func getMediumLighterShade(hexColor string) string {
+	info := parseColor(hexColor)
 
 	var factor float64
-	if brightness < 10 {
+	switch {
+	case info.brightness < 10:
 		factor = 60.0
-	} else if brightness < 30 {
+	case info.brightness < 30:
 		factor = 3.0
-	} else if brightness < 60 {
+	case info.brightness < 60:
 		factor = 2.0
-	} else if brightness < 100 {
+	case info.brightness < 100:
 		factor = 1.75
-	} else if brightness < 150 {
+	case info.brightness < 150:
 		factor = 1.5
-	} else {
+	default:
 		factor = 0.8
 	}
 
-	newR := int(math.Min(float64(r)*factor, 255))
-	newG := int(math.Min(float64(g)*factor, 255))
-	newB := int(math.Min(float64(b)*factor, 255))
+	newR := int(math.Min(float64(info.r)*factor, 255))
+	newG := int(math.Min(float64(info.g)*factor, 255))
+	newB := int(math.Min(float64(info.b)*factor, 255))
 
 	return fmt.Sprintf("%02x%02x%02x", newR, newG, newB)
 }
 
 // for dots - slightly darker than base color
 func getSlightlyDarkerShade(hexColor string) string {
-	r, _ := strconv.ParseInt(hexColor[0:2], 16, 64)
-	g, _ := strconv.ParseInt(hexColor[2:4], 16, 64)
-	b, _ := strconv.ParseInt(hexColor[4:6], 16, 64)
+	info := parseColor(hexColor)
 
-	brightness := 0.299*float64(r) + 0.587*float64(g) + 0.114*float64(b)
-
-	var factor float64
-	if brightness < 80 {
+	factor := 0.55
+	if info.brightness < 80 {
 		factor = 1.8
-	} else {
-		factor = 0.55
 	}
-	newR := int(float64(r) * factor)
-	newG := int(float64(g) * factor)
-	newB := int(float64(b) * factor)
+
+	newR := int(float64(info.r) * factor)
+	newG := int(float64(info.g) * factor)
+	newB := int(float64(info.b) * factor)
 
 	return fmt.Sprintf("%02x%02x%02x", newR, newG, newB)
 }
