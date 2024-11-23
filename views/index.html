@@ -77,8 +77,8 @@
   </p>
 
   <div class="flex2">
-    <img src="/300/200/b34fc7" alt="Purple placeholder">
-    <img src="/250/200/435eee" alt="Blue placeholder">
+    <img src="/300/200/b34fc7" alt="Purple placeholder with rounded corners">
+    <img src="/250/200/435eee?radius=20" alt="Blue placeholder">
   </div>
 
   <div style="margin-top: 2rem;">
@@ -86,14 +86,15 @@
     <div class="example-box">
       <p>/:width/:height # default gray</p>
       <p>/:width/:height/:color # custom color (hex)</p>
+      <p>/:width/:height/:color?radius=N # rounded corners</p>
     </div>
   </div>
 
   <div style="margin-top: 1.5rem;">
     <p class="dim section-label">examples:</p>
     <div class="example-box">
-      <p>/200/200/b34fc7 # 200x2020 #b34fc7</p>
-      <p>/300/200/435eee # 300x200 #435eee</p>
+      <p>/200/200/b34fc7 # 200x200 #b34fc7</p>
+      <p>/250/200/435eee?radius=20 # 300x200 #435eee</p>
       <p>/300/200 # 300x200 gray</p>
     </div>
   </div>

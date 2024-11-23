@@ -46,6 +46,7 @@ func generatePlaceholder(c *gin.Context) {
 	width := c.Param("width")
 	height := c.Param("height")
 	color := c.Param("color")
+	borderRadius := c.DefaultQuery("radius", "0")
 
 	w, err := strconv.Atoi(width)
 	if err != nil || w <= 0 || w > 3000 {
@@ -57,6 +58,11 @@ func generatePlaceholder(c *gin.Context) {
 	if err != nil || h <= 0 || h > 3000 {
 		c.String(http.StatusBadRequest, "Invalid height")
 		return
+	}
+
+	radius, err := strconv.Atoi(borderRadius)
+	if err != nil || radius < 0 || radius > min(w/2, h/2) {
+		radius = 0
 	}
 
 	if color == "" {
@@ -94,13 +100,19 @@ func generatePlaceholder(c *gin.Context) {
 					<feMergeNode in="SourceGraphic"/>
 				</feMerge>
 			</filter>
+			<mask id="roundedMask">
+				<rect width="%d" height="%d" rx="%d" ry="%d" fill="white"/>
+			</mask>
 		</defs>
-		<rect width="%d" height="%d" fill="url(#mainGrad)"/>
-		<rect width="%d" height="%d" fill="url(#dots)"/>
+		<g mask="url(#roundedMask)">
+			<rect width="%d" height="%d" fill="url(#mainGrad)"/>
+			<rect width="%d" height="%d" fill="url(#dots)"/>
+		</g>
 		<text x="50%%" y="50%%" text-anchor="middle" dominant-baseline="middle" 
 			font-family="Arial, Helvetica, sans-serif" font-weight="bold" font-size="24" 
 			fill="%s" filter="url(#softShadow)">%dx%d</text>
 	</svg>`, w, h, w, h, color, lighterColor, slightlyDarkerForDots,
+		w, h, radius, radius,
 		w, h, w, h,
 		getContrastColor(color), w, h)
 
@@ -111,6 +123,13 @@ func generatePlaceholder(c *gin.Context) {
 		c.Header("Cache-Control", "public, max-age=86400")
 	}
 	c.String(200, svg)
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
 }
 
 // for the main gradient
