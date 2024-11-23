@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🥀 Faux</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      font-family: 'Geist Mono', monospace;
+      margin: 0;
+      padding: 0;
+      text-wrap: wrap;
+    }
+
+    html {
+      padding: 4rem;
+      color: #eee;
+      background-color: #101010;
+    }
+
+    .flex {
+      gap: 16px;
+      display: flex;
+      align-items: center;
+    }
+
+    .flex2 {
+      gap: 32px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .title {
+      font-size: 1.5rem;
+    }
+
+    .example-box {
+      padding: 1rem;
+      border-radius: 4px;
+      background: #1a1a1a;
+      font-size: 0.9rem;
+      color: #a3a3a3;
+    }
+
+    a {
+      color: #eee;
+      transition: color 0.2s ease;
+    }
+
+    a:hover {
+      color: #fff;
+    }
+
+    .dim {
+      color: #a3a3a3;
+    }
+
+    .section-label {
+      margin-bottom: 0.75rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="flex">
+    <img src="https://sakura.rex.wf/linear/faux?text=FX&size=30" alt="Faux Logo" width="30" height="30">
+    <p class="title">faux</p>
+  </div>
+
+  <p style="margin: 1.5rem 0;" class="dim">
+    a minimal, fast, and <a href="https://github.com/floraorg/faux">open source</a> placeholder image service
+  </p>
+
+  <div class="flex2">
+    <img src="/300/200/b34fc7" alt="Purple placeholder" width="300" height="200">
+    <img src="/300/200/435eee" alt="Blue placeholder" width="300" height="200">
+    <img src="/200/200" alt="Gray placeholder" width="200" height="200">
+  </div>
+
+  <div style="margin-top: 2rem;">
+    <p class="dim section-label">usage:</p>
+    <div class="example-box">
+      <p>/:width/:height # default gray</p>
+      <p>/:width/:height/:color # custom color (hex)</p>
+    </div>
+  </div>
+
+  <div style="margin-top: 1.5rem;">
+    <p class="dim section-label">examples:</p>
+    <div class="example-box">
+      <p>/300/200 # 300x200 gray</p>
+      <p>/200/200/b34fc7 # 200x2020 b34fc7</p>
+      <p>/300/200/435eee # 300x200 435eee</p>
+    </div>
+  </div>
+
+  <p style="margin: 3rem 0 1rem 0;" class="dim">
+    brought to you by the <a href="https://github.com/floraorg">flora</a> team
+  </p>
+  <div class="flex">
+    <img src="https://sakura.rex.wf/linear/rexdotsh?text=RX&size=36" alt="rex" width="36" height="36">
+    <img src="https://sakura.rex.wf/linear/namishh?text=NM&size=36" alt="namishh" width="36" height="36">
+  </div>
+</body>
+
+</html>
